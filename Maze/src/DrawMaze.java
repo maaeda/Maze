@@ -31,6 +31,9 @@ public class DrawMaze extends MyFrame {
                 int red = rand.nextInt(255) + 100;
                 int ble = rand.nextInt(255) + 100;
                 int gre = rand.nextInt(255) + 100;
+                int addRed = 255 / mazeSize;
+                int addGreen = 255 / mazeSize;
+                int addBlue = 255 / mazeSize;
 
                 switch (Maze[i][j]) {
                     case 0://null
@@ -40,14 +43,16 @@ public class DrawMaze extends MyFrame {
                         drawString(String.valueOf(i)+","+String.valueOf(j),drawXpos+5,drawYpos+10,wallSize/4);
                         break;
                     case 1://InsideWall
-                        setColor(red,gre,ble);
+                        setColor(0,addGreen*i,addBlue*j);
                         fillRect(drawXpos, drawYpos,wallSize ,wallSize );
+
                         setColor(0,0,0);
                         drawString(String.valueOf(i)+","+String.valueOf(j),drawXpos+5,drawYpos+10,wallSize/4);
                         break;
                     case 2://OutsideWall
-                        setColor(0,drawXpos-100,drawYpos-100);
+                        setColor(0,addGreen*i,addBlue*j);
                         fillRect(drawXpos, drawYpos,wallSize ,wallSize );
+
                         setColor(0,0,0);
                         drawString(String.valueOf(i)+","+String.valueOf(j),drawXpos+5,drawYpos+10,wallSize/4);
                         break;
