@@ -7,7 +7,7 @@ public class DrawMaze extends MyFrame {
     int startX = 10;
     int startY = 40;
     int mazeSize = 31;
-    int wallSize = 25;
+    int wallSize = 30;
     int[][] Maze;
     Random rand = new Random();
     int startRow = 1;
