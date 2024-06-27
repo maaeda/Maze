@@ -36,27 +36,25 @@ public class DrawMaze extends MyFrame {
                 int addBlue = 255 / mazeSize;
 
                 switch (Maze[i][j]) {
-                    case 0://null
+                    case 0://道
                         setColor(255,255,255);
-                        fillRect(drawXpos, drawYpos,wallSize ,wallSize );
-                        setColor(0,0,0);
-                        drawString(String.valueOf(i)+","+String.valueOf(j),drawXpos+5,drawYpos+10,wallSize/4);
                         break;
-                    case 1://InsideWall
+                    case 1://中の壁
                         setColor(0,addGreen*i,addBlue*j);
-                        fillRect(drawXpos, drawYpos,wallSize ,wallSize );
-
-                        setColor(0,0,0);
-                        drawString(String.valueOf(i)+","+String.valueOf(j),drawXpos+5,drawYpos+10,wallSize/4);
                         break;
-                    case 2://OutsideWall
+                    case 2://外の壁
                         setColor(0,addGreen*i,addBlue*j);
-                        fillRect(drawXpos, drawYpos,wallSize ,wallSize );
-
-                        setColor(0,0,0);
-                        drawString(String.valueOf(i)+","+String.valueOf(j),drawXpos+5,drawYpos+10,wallSize/4);
+                        break;
+                    case 3://スタート
+                        setColor(255,0,0);
+                        break;
+                    case 4://ゴール
+                        setColor(0,255,0);
                         break;
                 }
+                fillRect(drawXpos, drawYpos,wallSize ,wallSize );
+                setColor(0,0,0);
+                drawString(String.valueOf(i)+","+String.valueOf(j),drawXpos+5,drawYpos+10,wallSize/4);
                 drawYpos += wallSize;
             }
             drawXpos += wallSize;
@@ -75,6 +73,8 @@ public class DrawMaze extends MyFrame {
                 }
             }
         }
+        Maze[1][1] = 3;
+        Maze[mazeSize-2][mazeSize-2] = 4;
     }
 
     public void CreateMaze(){
@@ -82,7 +82,7 @@ public class DrawMaze extends MyFrame {
             for(int y = 0; y < mazeSize; y++){
                 Random rand = new Random();
                 int num = rand.nextInt(10) + 100;
-                if (x==0 || x==mazeSize-1 || y==0 || y==mazeSize-1) {
+                if (x==0 || x==mazeSize-1 || y==0 || y==mazeSize-1 || Maze[x][y]==3 || Maze[x][y]==4) {
                 }else{
                     if (num % 2 == 0) {
                         Maze[x][y] = 1;
