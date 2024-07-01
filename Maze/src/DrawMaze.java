@@ -6,17 +6,20 @@ public class DrawMaze extends MyFrame {
 
     int startX =10;
     int startY =40;
-    int mazeSize = 30;
-    int wallSize = 30;
+    int mazeSize =33;
+    int wallSize = 25;
     int[][] Maze = new int[mazeSize][mazeSize];
 
     public void run() {
+        if (mazeSize % 2 == 0) {
+            mazeSize = mazeSize - 1;
+        }
         while(true) {
             initialize();
             Draw();
             CreateMaze();
             Draw();
-            sleep(0.5);
+            sleep(1);
             clear();
         }
     }
@@ -68,8 +71,8 @@ public class DrawMaze extends MyFrame {
                 //壁
                 if (x==0 || x==mazeSize-1 || y==0 || y==mazeSize-1) {
                     Maze[x][y] = 2;
-                }else {
-                    Maze[x][y] = 0;
+                } else {
+                    Maze[x][y] = 1;
                 }
             }
         }
@@ -78,19 +81,57 @@ public class DrawMaze extends MyFrame {
     }
 
     public void CreateMaze(){
-        for(int x = 0; x < mazeSize; x++){
-            for(int y = 0; y < mazeSize; y++){
-                Random rand = new Random();
-                int num = rand.nextInt(10) + 100;
-                if (x==0 || x==mazeSize-1 || y==0 || y==mazeSize-1 || Maze[x][y]==3 || Maze[x][y]==4) {
-                }else{
-                    if (num % 2 == 0) {
-                        Maze[x][y] = 1;
-                    }else {
-                        Maze[x][y] = 0;
-                    }
+        Stack<Point> stack = new Stack<>();
+        Random rand = new Random();
+        stack.push(new Point(1, 1));
+
+        while (!stack.isEmpty()) {
+            Point current = stack.peek();
+            int x = current.x;
+            int y = current.y;
+
+            Maze[x][y] = 0;
+
+            // 進行方向のリストをランダムにシャッフル
+            Point[] directions = {
+                    new Point(x, y - 2),
+                    new Point(x, y + 2),
+                    new Point(x - 2, y),
+                    new Point(x + 2, y)
+            };
+            for (int i = 0; i < directions.length; i++) {
+                int j = rand.nextInt(directions.length);
+                Point temp = directions[i];
+                directions[i] = directions[j];
+                directions[j] = temp;
+            }
+
+            boolean moved = false;
+            for (Point direction : directions) {
+                int nx = direction.x;
+                int ny = direction.y;
+
+                if (nx > 0 && nx < mazeSize - 1 && ny > 0 && ny < mazeSize - 1 && Maze[nx][ny] == 1) {
+                    //if (nx == mazeSize - 2 && ny == mazeSize - 2) continue;  // ゴール地点は避ける
+
+                    Maze[nx][ny] = 0;
+                    Maze[(x + nx) / 2][(y + ny) / 2] = 0;
+                    stack.push(new Point(nx, ny));
+                    moved = true;
+                    break;
                 }
             }
+
+            if (!moved) {
+                stack.pop();
+            }
+            Draw();
+            //sleep(0.000001);
         }
+        Maze[mazeSize-3][mazeSize-2] = 0;
+        Maze[mazeSize-2][mazeSize-3] = 0;
+        Maze[mazeSize-3][mazeSize-3] = 0;
+        Maze[1][1] = 3;
+        Maze[mazeSize-2][mazeSize-2] = 4;
     }
 }
