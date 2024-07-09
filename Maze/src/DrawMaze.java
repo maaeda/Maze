@@ -1,27 +1,46 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Random;
 import java.util.Stack;
 
-public class DrawMaze extends MyFrame {
+public class DrawMaze extends MyFrame implements KeyListener{
 
     int startX =10;
     int startY =40;
-    int mazeSize =33;
-    int wallSize = 25;
+    int mazeSize = 30;
+    int wallSize = (int)  850 / mazeSize;
     int[][] Maze = new int[mazeSize][mazeSize];
+    public void keyTyped(KeyEvent e) {
+    }
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            run();
+        }
+    }
+
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+    public DrawMaze() {
+        addKeyListener(this);
+    }
 
     public void run() {
+
         if (mazeSize % 2 == 0) {
             mazeSize = mazeSize - 1;
         }
-        while(true) {
-            initialize();
-            Draw();
-            CreateMaze();
-            Draw();
-            sleep(1);
-            clear();
+        if (wallSize < 1) {
+            wallSize = 1;
         }
+        clear();
+        initialize();
+        Draw();
+        CreateMaze();
+        Draw();
+
     }
 
     private void Draw() {
@@ -31,12 +50,12 @@ public class DrawMaze extends MyFrame {
         for (int i = 0; i < mazeSize; i++) {
             for (int j = 0; j < mazeSize; j++) {
                 Random rand = new Random();
-                int red = rand.nextInt(255) + 100;
-                int ble = rand.nextInt(255) + 100;
-                int gre = rand.nextInt(255) + 100;
-                int addRed = 255 / mazeSize;
-                int addGreen = 255 / mazeSize;
-                int addBlue = 255 / mazeSize;
+                int randRed = rand.nextInt(256) + 100;
+                int randBlee = rand.nextInt(256) + 100;
+                int randGreen = rand.nextInt(256) + 100;
+                int addRed = 256 / mazeSize;
+                int addGreen = 256 / mazeSize;
+                int addBlue = 256 / mazeSize;
 
                 switch (Maze[i][j]) {
                     case 0://道
@@ -49,15 +68,15 @@ public class DrawMaze extends MyFrame {
                         setColor(0,addGreen*i,addBlue*j);
                         break;
                     case 3://スタート
-                        setColor(255,0,0);
+                        setColor(0,0,255);
                         break;
                     case 4://ゴール
-                        setColor(0,255,0);
+                        setColor(255,0,0);
                         break;
                 }
                 fillRect(drawXpos, drawYpos,wallSize ,wallSize );
                 setColor(0,0,0);
-                drawString(String.valueOf(i)+","+String.valueOf(j),drawXpos+5,drawYpos+10,wallSize/4);
+                drawString(i +","+ j,drawXpos+5,drawYpos+10,wallSize/4);
                 drawYpos += wallSize;
             }
             drawXpos += wallSize;
@@ -106,13 +125,14 @@ public class DrawMaze extends MyFrame {
                 directions[j] = temp;
             }
 
+            //移動
             boolean moved = false;
             for (Point direction : directions) {
                 int nx = direction.x;
                 int ny = direction.y;
 
                 if (nx > 0 && nx < mazeSize - 1 && ny > 0 && ny < mazeSize - 1 && Maze[nx][ny] == 1) {
-                    //if (nx == mazeSize - 2 && ny == mazeSize - 2) continue;  // ゴール地点は避ける
+                    if (nx == mazeSize - 2 && ny == mazeSize - 2) continue;  // ゴール地点を避ける
 
                     Maze[nx][ny] = 0;
                     Maze[(x + nx) / 2][(y + ny) / 2] = 0;
@@ -125,13 +145,14 @@ public class DrawMaze extends MyFrame {
             if (!moved) {
                 stack.pop();
             }
-            Draw();
+            //clear();
+            //Draw();
             //sleep(0.000001);
         }
-        Maze[mazeSize-3][mazeSize-2] = 0;
+        //Maze[mazeSize-3][mazeSize-2] = 0;
         Maze[mazeSize-2][mazeSize-3] = 0;
-        Maze[mazeSize-3][mazeSize-3] = 0;
+        //Maze[mazeSize-3][mazeSize-3] = 0;
         Maze[1][1] = 3;
-        Maze[mazeSize-2][mazeSize-2] = 4;
+        //Maze[mazeSize-2][mazeSize-2] = 4;
     }
 }
