@@ -8,8 +8,8 @@ public class DrawMaze extends MyFrame implements KeyListener{
 
     int startX =10;
     int startY =40;
-    int mazeSize = 30;
-    int wallSize = (int)  850 / mazeSize;
+    int mazeSize = 15;
+    int wallSize = 850 / mazeSize;
     int[][] Maze = new int[mazeSize][mazeSize];
     public void keyTyped(KeyEvent e) {
     }
